@@ -1,13 +1,24 @@
-import { useState } from 'react'
-import './App.css'
+import React from 'react';
+import Navbar from './components/Navbar';
+import HeroSection from './components/HeroSection';
+import FeaturesSection from './components/FeaturesSection';
+import RecommendationSection from './components/RecommendationSection';
+import AboutSection from './components/AboutSection';
+import TestimonialsSection from './components/TestimonialsSection';
+import Footer from './components/Footer';
 
-function App() {
-
+const App = () => {
   return (
-    <>
-      <h1 className='text-red-700 italic'>tai</h1>
-    </>
-  )
-}
+    <div>
+      <Navbar />
+      <HeroSection />
+      <FeaturesSection />
+      <RecommendationSection />
+      <AboutSection />
+      <TestimonialsSection />
+      <Footer />
+    </div>
+  );
+};
 
-export default App
+export default App;
