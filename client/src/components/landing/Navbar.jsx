@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react'; // lucide-react icon library
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,9 +30,7 @@ const Navbar = () => {
 
         {/* Desktop Login Button */}
         <Link to="/login" className="hidden md:block">
-          <button className="ml-6 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition duration-300 transform hover:scale-105 shadow-md">
-            Login
-          </button>
+          <button className="button">Login</button>
         </Link>
 
         {/* Mobile Hamburger Button */}
@@ -53,12 +51,60 @@ const Navbar = () => {
           <a href="#about" onClick={() => setIsOpen(false)} className="block hover:text-green-500">About</a>
           <a href="#contact" onClick={() => setIsOpen(false)} className="block hover:text-green-500">Contact</a>
           <Link to="/login" onClick={() => setIsOpen(false)}>
-            <button className="w-full mt-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition duration-300 shadow-md">
-              Login
-            </button>
+            <button className="w-full button">Login</button>
           </Link>
         </div>
       )}
+
+      {/* Embedded styles for the button */}
+      <style>
+  {`
+    .button {
+      cursor: pointer;
+      position: relative;
+      padding: 6px 16px;
+      font-size: 14px;
+      color: rgb(34, 197, 94);
+      border: 2px solid rgb(34, 197, 94);
+      border-radius: 30px;
+      background-color: transparent;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 40px;
+      aspect-ratio: 1 / 1;
+      transform: translate(-50%, -50%) scale(0);
+      background-color: rgb(34, 197, 94);
+      border-radius: 9999px;
+      z-index: -1;
+      transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+
+    .button:hover::before {
+      transform: translate(-50%, -50%) scale(10);
+    }
+
+    .button:hover {
+      color: #fff;
+      scale: 1.05;
+      box-shadow: 0 0px 12px rgba(34, 197, 94, 0.4);
+    }
+
+    .button:active {
+      scale: 1;
+    }
+  `}
+</style>
+
     </nav>
   );
 };

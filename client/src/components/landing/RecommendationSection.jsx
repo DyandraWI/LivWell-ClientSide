@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import aiImage from '../../assets/images/aiIllustration.png';
 
 const RecommendationSection = () => {
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left; 
+    const y = e.clientY - rect.top;  
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -10;
+    const rotateY = ((x - centerX) / centerX) * 10;
+
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+  };
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+    card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+  };
+
   return (
     <div className="flex items-center justify-between p-12 bg-white max-w-6xl mx-auto relative">
       <style>
@@ -24,7 +45,7 @@ const RecommendationSection = () => {
           }
 
           .learn-more .circle {
-            transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+            transition: all 0.55s cubic-bezier(0.65, 0, 0.076, 1);
             position: relative;
             display: block;
             margin: 0;
@@ -35,7 +56,7 @@ const RecommendationSection = () => {
           }
 
           .learn-more .circle .icon {
-            transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+            transition: all 0.55s cubic-bezier(0.65, 0, 0.076, 1);
             position: absolute;
             top: 0;
             bottom: 0;
@@ -63,7 +84,7 @@ const RecommendationSection = () => {
           }
 
           .learn-more .button-text {
-            transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+            transition: all 0.55s cubic-bezier(0.65, 0, 0.076, 1);
             position: absolute;
             top: 0;
             left: 0;
@@ -90,6 +111,18 @@ const RecommendationSection = () => {
           .learn-more:hover .button-text {
             color: #fff;
           }
+
+          .cards {
+            perspective: 1000px;
+          }
+
+          .card {
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
+            border-radius: 1rem;
+            overflow: hidden;
+          }
         `}
       </style>
 
@@ -112,8 +145,15 @@ const RecommendationSection = () => {
         </Link>
       </div>
 
-      <div className="w-1/2 flex justify-center">
-        <img src={aiImage} alt="AI Illustration" className="w-full max-w-md" />
+      <div className="w-1/2 flex justify-center cards">
+        <div
+          className="card w-full max-w-md"
+          ref={cardRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <img src={aiImage} alt="AI Illustration" className="w-full h-auto object-cover" />
+        </div>
       </div>
     </div>
   );
