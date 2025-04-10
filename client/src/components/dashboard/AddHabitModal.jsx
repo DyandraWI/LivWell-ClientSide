@@ -15,7 +15,7 @@ const AddHabitModal = ({ isOpen, onClose, onSave }) => {
 
     const newHabit = {
       name,
-      icon: category === 'health' ? '💧' : category === 'sleep' ? '🌙' : '🏁',
+      icon: category === 'health' ? '💧' : category === 'sleep' ? '🌙' : category === 'exercise' ? '🏋️' : null,
       progress: 0,
       goal: `${target} ${unit}`,
       current: '0',
@@ -37,12 +37,7 @@ const AddHabitModal = ({ isOpen, onClose, onSave }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md">
           <div className="absolute inset-0 bg-black/10" onClick={onClose}></div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-            className="relative z-50 bg-white p-8 rounded-3xl shadow-xl w-full max-w-xl"
-          >
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} className="relative z-50 bg-white p-8 rounded-3xl shadow-xl w-full max-w-xl">
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h2 className="text-xl font-semibold">Add New Habits</h2>
@@ -56,47 +51,28 @@ const AddHabitModal = ({ isOpen, onClose, onSave }) => {
             <form className="space-y-5" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Nama Habit</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter Your Habit"
-                  className="w-full px-4 py-3 border rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter Your Habit" className="w-full px-4 py-3 border rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
 
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Category</label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-3 border rounded-xl bg-gray-100 focus:outline-none"
-                >
+                <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-4 py-3 border rounded-xl bg-gray-100 focus:outline-none">
                   <option value="">Select Category</option>
-                  <option value="health">Health</option>
+                  <option value="health">Water</option>
                   <option value="sleep">Sleep</option>
+                  <option value="exercise">Exercise</option>
                 </select>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-600 mb-1">Daily Target</label>
-                  <input
-                    type="number"
-                    value={target}
-                    onChange={(e) => setTarget(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl bg-gray-100 focus:outline-none"
-                    placeholder="0"
-                  />
+                  <input type="number" value={target} onChange={(e) => setTarget(e.target.value)} className="w-full px-4 py-3 border rounded-xl bg-gray-100 focus:outline-none" placeholder="0" />
                 </div>
 
                 <div>
                   <label className="block text-sm text-gray-600 mb-1">Unit</label>
-                  <select
-                    value={unit}
-                    onChange={(e) => setUnit(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-xl bg-gray-100 focus:outline-none"
-                  >
+                  <select value={unit} onChange={(e) => setUnit(e.target.value)} className="w-full px-4 py-3 border rounded-xl bg-gray-100 focus:outline-none">
                     <option value="">Select Unit</option>
                     <option value="glasses">glasses</option>
                     <option value="minutes">minutes</option>
@@ -105,17 +81,10 @@ const AddHabitModal = ({ isOpen, onClose, onSave }) => {
               </div>
 
               <div className="flex justify-end mt-6 gap-3">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="px-5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700"
-                >
+                <button type="button" onClick={onClose} className="px-5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl bg-lime-500 hover:bg-lime-600 text-white font-semibold"
-                >
+                <button type="submit" className="px-5 py-2 rounded-xl bg-lime-500 hover:bg-lime-600 text-white font-semibold">
                   Create
                 </button>
               </div>

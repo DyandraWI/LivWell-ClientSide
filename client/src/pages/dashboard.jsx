@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Plus, User, LayoutGrid, BarChart3 } from 'lucide-react';
+import { Plus, User, LayoutGrid, BarChart3, Bell } from 'lucide-react';
 import AddHabitModal from '../components/dashboard/AddHabitModal';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 
 const Dashboard = () => {
   const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -15,15 +18,14 @@ const Dashboard = () => {
     { name: 'Exercise', icon: '🏋️‍♂️', progress: 50, goal: '30 minutes', current: '15', streak: 2, color: '#EF4444' },
     { name: 'Meditation', icon: '🧘‍♂️', progress: 50, goal: '20 minutes', current: '10', streak: 7, color: '#22C55E' },
     { name: 'Drink Water', icon: '💧', progress: 88, goal: '8 glasses', current: '7', streak: 6, color: '#3B82F6' },
-  ]);  
+  ]);
 
   const handleAddHabit = (newHabit) => {
     const defaultColor = getDefaultColor(newHabit.name || '');
-  
+
     setHabits([...habits, { ...newHabit, color: defaultColor }]);
     setShowModal(false);
   };
-  
 
   const handleProgressChange = (index, change) => {
     setHabits((prevHabits) => {
@@ -63,12 +65,12 @@ const Dashboard = () => {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-xl font-semibold text-green-500">Today</h1>
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 border px-4 py-2 rounded-lg text-sm hover:bg-green-100"
-          >
+          <button onClick={() => setShowModal(true)} className="flex items-center gap-2 border px-4 py-2 rounded-lg text-sm hover:bg-green-100">
             <Plus size={16} /> Add Habit
           </button>
+          <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+            <Bell size={16} />
+          </div>
           <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
             <User size={16} />
           </div>
@@ -118,50 +120,27 @@ const Dashboard = () => {
               </div>
               <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{habit.streak} day streak</span>
             </div>
-            <p className="text-sm text-gray-500 mt-1">Progress: {habit.current} / {habit.goal}</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Progress: {habit.current} / {habit.goal}
+            </p>
 
             {/* Progress Circle */}
             <div className="flex items-center justify-between mt-3">
               <div className="relative w-16 h-16">
                 <svg className="w-full h-full transform -rotate-90">
-                  <circle
-                    cx="32"
-                    cy="32"
-                    r="28"
-                    stroke="#e5e7eb"
-                    strokeWidth="6"
-                    fill="none"
-                  />
-                  <circle
-                    cx="32"
-                    cy="32"
-                    r="28"
-                    stroke={habit.color}
-                    strokeWidth="6"
-                    strokeDasharray={176}
-                    strokeDashoffset={176 - (176 * habit.progress / 100)}
-                    fill="none"
-                    strokeLinecap="round"
-                    />
+                  <circle cx="32" cy="32" r="28" stroke="#e5e7eb" strokeWidth="6" fill="none" />
+                  <circle cx="32" cy="32" r="28" stroke={habit.color} strokeWidth="6" strokeDasharray={176} strokeDashoffset={176 - (176 * habit.progress) / 100} fill="none" strokeLinecap="round" />
                 </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-sm font-bold">
-                  {habit.progress}%
-                </div>
+                <div className="absolute inset-0 flex items-center justify-center text-sm font-bold">{habit.progress}%</div>
               </div>
 
               {/* Up & Down Buttons */}
               <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => handleProgressChange(idx, 1)}
-                  className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-gray-100"
-                >
+                <button onClick={() => handleProgressChange(idx, 1)} className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-gray-100">
                   <ChevronUp size={16} />
                 </button>
 
-                <button
-                  onClick={() => handleProgressChange(idx, -1)}
-                  className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-gray-100"
-                >
+                <button onClick={() => handleProgressChange(idx, -1)} className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-gray-100">
                   <ChevronDown size={16} />
                 </button>
               </div>
@@ -171,19 +150,12 @@ const Dashboard = () => {
       </div>
 
       {/* Button to Open Modal */}
-      <button
-        onClick={() => setShowModal(true)}
-        className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-center"
-      >
+      <button onClick={() => setShowModal(true)} className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-center">
         + Add New Habit
       </button>
 
       {/* Modal Component */}
-      <AddHabitModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        onSave={handleAddHabit}
-      />
+      <AddHabitModal isOpen={showModal} onClose={() => setShowModal(false)} onSave={handleAddHabit} />
     </div>
   );
 };
