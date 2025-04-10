@@ -39,33 +39,19 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-lime-200 to-green-400 px-4 relative">
+    <div className="flex items-center justify-center min-h-screen bg-[linear-gradient(to_bottom,_white_10%,_white_75%,_#4ade80_100%)] px-4 relative">
       <Toaster position="top-center" reverseOrder={false} />
 
-      <div className="bg-white/30 backdrop-blur-lg border border-white/40 p-8 rounded-2xl shadow-xl w-full max-w-md transition-all duration-300 text-gray-800">
+      <div className="bg-white/30 backdrop-blur-lg border border-white/40 p-8 rounded-2xl shadow-2xl w-full max-w-md transition-all duration-300 text-gray-800">
         <h2 className="text-3xl font-extrabold text-center text-green-700 mb-6">Welcome Back</h2>
         <form className="space-y-10" onSubmit={handleSubmit}>
           <div className="container">
-            <input
-              type="text"
-              placeholder=" "
-              className="input peer"
-              value={email}
-              required
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <input type="text" placeholder=" " className="input peer" value={email} required onChange={(e) => setEmail(e.target.value)} />
             <label className="label">Email</label>
           </div>
 
           <div className="container">
-            <input
-              type="password"
-              placeholder=" "
-              className="input peer"
-              value={password}
-              required
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <input type="password" placeholder=" " className="input peer" value={password} required onChange={(e) => setPassword(e.target.value)} />
             <label className="label">Password</label>
           </div>
 
@@ -83,14 +69,13 @@ const Login = () => {
 
         <p className="text-center text-sm text-gray-700 mt-6">
           Don’t have an account?{' '}
-          <a href="/register" className="text-green-600 hover:underline">Sign up</a>
+          <a href="/register" className="text-green-600 hover:underline">
+            Sign up
+          </a>
         </p>
 
         <div className="text-center mt-4">
-          <button
-            onClick={() => navigate('/')}
-            className="text-sm text-gray-700 hover:text-green-700 underline"
-          >
+          <button onClick={() => navigate('/')} className="text-sm text-gray-700 hover:text-green-700 underline">
             ← Back to Landing Page
           </button>
         </div>

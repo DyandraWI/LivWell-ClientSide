@@ -40,57 +40,29 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-lime-200 to-green-400 px-4 relative">
+    <div className="flex items-center justify-center min-h-screen bg-[linear-gradient(to_bottom,_white_10%,_white_75%,_#4ade80_100%)] px-4 relative">
       <Toaster position="top-center" reverseOrder={false} />
 
-      <div className="bg-white/30 backdrop-blur-lg border border-white/40 p-8 rounded-2xl shadow-xl w-full max-w-md transition-all duration-300 text-gray-800">
+      <div className="bg-white/30 backdrop-blur-lg border border-white/40 p-8 rounded-2xl shadow-2xl w-full max-w-md transition-all duration-300 text-gray-800">
         <h2 className="text-3xl font-extrabold text-center text-green-600 mb-8">Create an Account</h2>
         <form className="space-y-10" onSubmit={handleSubmit}>
           <div className="container">
-            <input
-              type="text"
-              className={`input peer ${username ? 'not-empty' : ''}`}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              placeholder=" "
-            />
+            <input type="text" className={`input peer ${username ? 'not-empty' : ''}`} value={username} onChange={(e) => setUsername(e.target.value)} required placeholder=" " />
             <label className="label">Username</label>
           </div>
 
           <div className="container">
-            <input
-              type="email"
-              className={`input peer ${email ? 'not-empty' : ''}`}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder=" "
-            />
+            <input type="email" className={`input peer ${email ? 'not-empty' : ''}`} value={email} onChange={(e) => setEmail(e.target.value)} required placeholder=" " />
             <label className="label">Email</label>
           </div>
 
           <div className="container">
-            <input
-              type="password"
-              className={`input peer ${password ? 'not-empty' : ''}`}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder=" "
-            />
+            <input type="password" className={`input peer ${password ? 'not-empty' : ''}`} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder=" " />
             <label className="label">Password</label>
           </div>
 
           <div className="container">
-            <input
-              type="password"
-              className={`input peer ${confirmPassword ? 'not-empty' : ''}`}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              placeholder=" "
-            />
+            <input type="password" className={`input peer ${confirmPassword ? 'not-empty' : ''}`} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required placeholder=" " />
             <label className="label">Confirm Password</label>
           </div>
 
@@ -108,7 +80,9 @@ const Register = () => {
 
         <p className="text-center text-sm text-gray-600 mt-6">
           Already have an account?{' '}
-          <a href="/login" className="text-green-500 hover:underline">Login here</a>
+          <a href="/login" className="text-green-500 hover:underline">
+            Login here
+          </a>
         </p>
       </div>
 
