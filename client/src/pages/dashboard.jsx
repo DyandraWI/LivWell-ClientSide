@@ -15,11 +15,11 @@ const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [habits, setHabits] = useState([
-    { name: 'Daily Water', icon: '💧', progress: 63, goal: '8', current: '5', streak: 3, color: '#3B82F6' },
-    { name: 'Sleep', icon: '🌙', progress: 88, goal: '8', current: '7', streak: 6, color: '#8B5CF6' },
-    { name: 'Exercise', icon: '🏋️‍♂️', progress: 50, goal: '30', current: '15', streak: 2, color: '#EF4444' },
-    { name: 'Meditation', icon: '🧘‍♂️', progress: 50, goal: '20', current: '10', streak: 7, color: '#22C55E' },
-    { name: 'Drink Water', icon: '💧', progress: 88, goal: '8', current: '7', streak: 6, color: '#3B82F6' },
+    { id: 1, name: 'Daily Water', icon: '💧', progress: 63, goal: '8', current: '5', streak: 3, color: '#3B82F6' },
+    { id: 2, name: 'Sleep', icon: '🌙', progress: 88, goal: '8', current: '7', streak: 6, color: '#8B5CF6' },
+    { id: 3, name: 'Exercise', icon: '🏋️‍♂️', progress: 50, goal: '30', current: '15', streak: 2, color: '#EF4444' },
+    { id: 4, name: 'Meditation', icon: '🧘‍♂️', progress: 50, goal: '20', current: '10', streak: 7, color: '#22C55E' },
+    { id: 5, name: 'Drink Water', icon: '💧', progress: 88, goal: '8', current: '7', streak: 6, color: '#3B82F6' },
   ]);
 
   const getDefaultColorByCategory = (icon) => {
@@ -39,10 +39,12 @@ const Dashboard = () => {
     const currentValue = parseFloat(newHabit.current || '0');
     const progress = Math.round((currentValue / goalValue) * 100);
 
+    const newId = Date.now(); // unique ID
     setHabits([
       ...habits,
       {
         ...newHabit,
+        id: newId,
         color: defaultColor,
         progress,
         streak: 0,
@@ -51,10 +53,10 @@ const Dashboard = () => {
     setShowModal(false);
   };
 
-  const handleProgressChange = (index, change) => {
+  const handleProgressChange = (habitId, change) => {
     setHabits((prevHabits) =>
-      prevHabits.map((habit, idx) => {
-        if (idx === index) {
+      prevHabits.map((habit) => {
+        if (habit.id === habitId) {
           const goalValue = parseFloat(habit.goal);
           let newCurrent = parseFloat(habit.current) + change;
 
@@ -74,8 +76,8 @@ const Dashboard = () => {
     );
   };
 
-  const handleDeleteHabit = (indexToDelete) => {
-    setHabits((prevHabits) => prevHabits.filter((_, idx) => idx !== indexToDelete));
+  const handleDeleteHabit = (habitId) => {
+    setHabits((prevHabits) => prevHabits.filter((habit) => habit.id !== habitId));
   };
 
   return (
@@ -143,14 +145,14 @@ const Dashboard = () => {
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            {habits.map((habit, idx) => (
+            {habits.map((habit) => (
               <HabitCard
-              key={idx}
-              habit={habit}
-              onIncrease={() => handleProgressChange(idx, 1)}
-              onDecrease={() => handleProgressChange(idx, -1)}
-              onConfirmDelete={() => handleDeleteHabit(idx)}
-            />            
+                key={habit.id}
+                habit={habit}
+                onIncrease={() => handleProgressChange(habit.id, 1)}
+                onDecrease={() => handleProgressChange(habit.id, -1)}
+                onConfirmDelete={() => handleDeleteHabit(habit.id)}
+              />
             ))}
           </div>
 

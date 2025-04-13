@@ -7,8 +7,8 @@ const HabitCard = ({ habit, onIncrease, onDecrease, onConfirmDelete }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   const handleDelete = () => {
-    setIsVisible(false); // trigger fade out
-    setTimeout(() => onConfirmDelete(), 300); // wait for fade out to finish
+    setIsVisible(false);
+    setTimeout(() => onConfirmDelete(), 300);
   };
 
   return (
@@ -20,7 +20,6 @@ const HabitCard = ({ habit, onIncrease, onDecrease, onConfirmDelete }) => {
           transition={{ duration: 0.3 }}
           className="bg-white rounded-2xl shadow-md p-5 hover:shadow-lg transition-shadow duration-300"
         >
-          {/* Header */}
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
               <span className="text-2xl">{habit.icon}</span>
@@ -31,12 +30,10 @@ const HabitCard = ({ habit, onIncrease, onDecrease, onConfirmDelete }) => {
             </span>
           </div>
 
-          {/* Progress Info */}
           <p className="text-sm text-gray-500 mt-2">
             Progress: <span className="text-gray-700 font-medium">{habit.current} / {habit.goal}</span>
           </p>
 
-          {/* Progress Circle + Controls */}
           <div className="flex items-center justify-between mt-4">
             <div className="relative w-16 h-16">
               <svg className="w-full h-full transform -rotate-90">
@@ -77,7 +74,6 @@ const HabitCard = ({ habit, onIncrease, onDecrease, onConfirmDelete }) => {
             </div>
           </div>
 
-          {/* Delete Button with Confirmation */}
           <div className="mt-5 flex justify-end relative group">
             {!showConfirm ? (
               <button
@@ -103,8 +99,6 @@ const HabitCard = ({ habit, onIncrease, onDecrease, onConfirmDelete }) => {
                 </button>
               </div>
             )}
-
-            {/* Tooltip */}
             {!showConfirm && (
               <div className="absolute -top-8 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                 Are you sure?
