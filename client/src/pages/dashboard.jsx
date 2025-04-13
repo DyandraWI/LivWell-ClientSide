@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Plus, User, LayoutGrid, BarChart3, Bell } from 'lucide-react';
 import AddHabitModal from '../components/dashboard/AddHabitModal';
 import HabitCard from '../components/dashboard/HabitCard';
-import StatsView from '../components/dashboard/StatsView'; // Tambahkan komponen StatsView jika belum ada
+import StatsView from '../components/dashboard/StatsView';
 
 const Dashboard = () => {
   const today = new Date().toLocaleDateString('en-US', {
@@ -24,17 +24,12 @@ const Dashboard = () => {
 
   const getDefaultColorByCategory = (icon) => {
     switch (icon) {
-      case '💧':
-        return '#3B82F6'; // Water - Blue
-      case '🌙':
-        return '#8B5CF6'; // Sleep - Purple
+      case '💧': return '#3B82F6';
+      case '🌙': return '#8B5CF6';
       case '🏋️':
-      case '🏋️‍♂️':
-        return '#EF4444'; // Exercise - Red
-      case '🧘‍♂️':
-        return '#22C55E'; // Meditation - Green
-      default:
-        return '#10B981'; // Default - Teal
+      case '🏋️‍♂️': return '#EF4444';
+      case '🧘‍♂️': return '#22C55E';
+      default: return '#10B981';
     }
   };
 
@@ -79,9 +74,12 @@ const Dashboard = () => {
     );
   };
 
+  const handleDeleteHabit = (indexToDelete) => {
+    setHabits((prevHabits) => prevHabits.filter((_, idx) => idx !== indexToDelete));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 px-6 py-8">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-xl font-semibold text-green-500">Today</h1>
         <div className="flex items-center gap-4">
@@ -103,7 +101,6 @@ const Dashboard = () => {
       <h2 className="text-3xl font-bold mb-1">Welcome to LivWell</h2>
       <p className="text-gray-500 mb-6">{today}</p>
 
-      {/* Stats Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         <div className="bg-white rounded-xl shadow p-4">
           <p className="text-sm text-gray-500">Completion Rate</p>
@@ -119,7 +116,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Habit View Controls */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-semibold">Your Habits</h3>
         <div className="flex items-center gap-2">
@@ -142,7 +138,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Conditional Views */}
       {showStats ? (
         <StatsView habits={habits} />
       ) : (
@@ -150,11 +145,12 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {habits.map((habit, idx) => (
               <HabitCard
-                key={idx}
-                habit={habit}
-                onIncrease={() => handleProgressChange(idx, 1)}
-                onDecrease={() => handleProgressChange(idx, -1)}
-              />
+              key={idx}
+              habit={habit}
+              onIncrease={() => handleProgressChange(idx, 1)}
+              onDecrease={() => handleProgressChange(idx, -1)}
+              onConfirmDelete={() => handleDeleteHabit(idx)}
+            />            
             ))}
           </div>
 
