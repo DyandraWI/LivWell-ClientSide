@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ const Register = () => {
 
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!username || !email || !password || !confirmPassword) {
@@ -35,8 +36,31 @@ const Register = () => {
       return;
     }
 
-    toast.success('Registrasi berhasil!');
-    setTimeout(() => navigate('/login'), 2000);
+    try {
+      const response = await axios.post(
+        'https://apihabittracker.up.railway.app/api/profiles',
+        {
+          username: username,
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success('Registrasi berhasil!');
+        setTimeout(() => navigate('/login'), 500);
+      } else {
+        toast.error('Registrasi gagal.');
+      }
+    } catch (error) {
+      toast.error('Terjadi kesalahan saat registrasi.');
+      console.error('Error saat registrasi:', error); // Tambahkan ini untuk debugging
+    }
   };
 
   return (

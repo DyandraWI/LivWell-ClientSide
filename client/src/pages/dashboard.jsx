@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Plus, User, LayoutGrid, BarChart3, Bell } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import AddHabitModal from '../components/dashboard/AddHabitModal';
 import HabitCard from '../components/dashboard/HabitCard';
-import StatsView from '../components/dashboard/StatsView'; // Tambahkan komponen StatsView jika belum ada
+import StatsView from '../components/dashboard/StatsView';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   const today = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
@@ -14,6 +17,8 @@ const Dashboard = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
   const [habits, setHabits] = useState([
     { name: 'Daily Water', icon: '💧', progress: 63, goal: '8', current: '5', streak: 3, color: '#3B82F6' },
     { name: 'Sleep', icon: '🌙', progress: 88, goal: '8', current: '7', streak: 6, color: '#8B5CF6' },
@@ -25,16 +30,16 @@ const Dashboard = () => {
   const getDefaultColorByCategory = (icon) => {
     switch (icon) {
       case '💧':
-        return '#3B82F6'; // Water - Blue
+        return '#3B82F6';
       case '🌙':
-        return '#8B5CF6'; // Sleep - Purple
+        return '#8B5CF6';
       case '🏋️':
       case '🏋️‍♂️':
-        return '#EF4444'; // Exercise - Red
+        return '#EF4444';
       case '🧘‍♂️':
-        return '#22C55E'; // Meditation - Green
+        return '#22C55E';
       default:
-        return '#10B981'; // Default - Teal
+        return '#10B981';
     }
   };
 
@@ -79,23 +84,36 @@ const Dashboard = () => {
     );
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('user_id');
+    navigate('/login');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 px-6 py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-xl font-semibold text-green-500">Today</h1>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 border px-4 py-2 rounded-lg text-sm hover:bg-green-100"
-          >
+        <div className="flex items-center gap-4 relative">
+          <button onClick={() => setShowModal(true)} className="flex items-center gap-2 border px-4 py-2 rounded-lg text-sm hover:bg-green-100">
             <Plus size={16} /> Add Habit
           </button>
+
           <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
             <Bell size={16} />
           </div>
-          <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-            <User size={16} />
+
+          <div className="relative">
+            <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer hover:bg-green-100 transition" onClick={() => setShowUserMenu(!showUserMenu)}>
+              <User size={16} />
+            </div>
+            {showUserMenu && (
+              <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow z-20">
+                <button onClick={handleLogout} className="w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-gray-100">
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -123,20 +141,10 @@ const Dashboard = () => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-semibold">Your Habits</h3>
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setShowStats(false)}
-            className={`flex items-center gap-1 px-3 py-1 text-sm rounded-md border ${
-              !showStats ? 'bg-green-100' : 'bg-white'
-            } hover:bg-green-100`}
-          >
+          <button onClick={() => setShowStats(false)} className={`flex items-center gap-1 px-3 py-1 text-sm rounded-md border ${!showStats ? 'bg-green-100' : 'bg-white'} hover:bg-green-100`}>
             <LayoutGrid size={16} /> Grid
           </button>
-          <button
-            onClick={() => setShowStats(true)}
-            className={`flex items-center gap-1 px-3 py-1 text-sm rounded-md border ${
-              showStats ? 'bg-green-100' : 'bg-white'
-            } hover:bg-green-100`}
-          >
+          <button onClick={() => setShowStats(true)} className={`flex items-center gap-1 px-3 py-1 text-sm rounded-md border ${showStats ? 'bg-green-100' : 'bg-white'} hover:bg-green-100`}>
             <BarChart3 size={16} /> Stats
           </button>
         </div>
@@ -149,29 +157,17 @@ const Dashboard = () => {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {habits.map((habit, idx) => (
-              <HabitCard
-                key={idx}
-                habit={habit}
-                onIncrease={() => handleProgressChange(idx, 1)}
-                onDecrease={() => handleProgressChange(idx, -1)}
-              />
+              <HabitCard key={idx} habit={habit} onIncrease={() => handleProgressChange(idx, 1)} onDecrease={() => handleProgressChange(idx, -1)} />
             ))}
           </div>
 
-          <button
-            onClick={() => setShowModal(true)}
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-center"
-          >
+          <button onClick={() => setShowModal(true)} className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-center">
             + Add New Habit
           </button>
         </>
       )}
 
-      <AddHabitModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        onSave={handleAddHabit}
-      />
+      <AddHabitModal isOpen={showModal} onClose={() => setShowModal(false)} onSave={handleAddHabit} />
     </div>
   );
 };
