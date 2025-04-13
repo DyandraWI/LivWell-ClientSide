@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { ChevronUp, ChevronDown, Trash } from 'lucide-react';
+import { ChevronUp, ChevronDown, Trash, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const HabitCard = ({ habit, onIncrease, onDecrease, onConfirmDelete }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+
+  const isGoalAchieved = parseFloat(habit.current) >= parseFloat(habit.goal);
 
   const handleDelete = () => {
     setIsVisible(false);
@@ -18,9 +20,11 @@ const HabitCard = ({ habit, onIncrease, onDecrease, onConfirmDelete }) => {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.3 }}
-          className="bg-white rounded-2xl shadow-md p-5 hover:shadow-lg transition-shadow duration-300"
+          className={`bg-white rounded-2xl shadow-md p-5 hover:shadow-lg transition-shadow duration-300 ${
+            isGoalAchieved ? 'border-green-400 border' : ''
+          }`}
         >
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start mb-2">
             <div className="flex items-center gap-3">
               <span className="text-2xl">{habit.icon}</span>
               <h4 className="text-lg font-semibold text-gray-800">{habit.name}</h4>
@@ -30,31 +34,48 @@ const HabitCard = ({ habit, onIncrease, onDecrease, onConfirmDelete }) => {
             </span>
           </div>
 
-          <p className="text-sm text-gray-500 mt-2">
-            Progress: <span className="text-gray-700 font-medium">{habit.current} / {habit.goal}</span>
-          </p>
+          <div className="flex justify-between items-center">
+          <p className="text-sm text-gray-500">
+          Progress:{' '}
+          <span className={`font-medium ${parseFloat(habit.current) === 0 ? 'text-gray-400' : 'text-gray-700'}`}>
+            {parseFloat(habit.current) || 0} / {parseFloat(habit.goal) || 1} {habit.unit}
+          </span>
+        </p>
+
+
+            <div
+              className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full transition-opacity duration-300 ${
+                isGoalAchieved ? 'text-green-600 bg-green-100 opacity-100' : 'opacity-0'
+              }`}
+              style={{ height: '24px' }}
+            >
+              <CheckCircle size={14} className={`${isGoalAchieved ? 'inline' : 'hidden'}`} />
+              Goal Achieved
+            </div>
+
+          </div>
 
           <div className="flex items-center justify-between mt-4">
-            <div className="relative w-16 h-16">
-              <svg className="w-full h-full transform -rotate-90">
-                <circle cx="32" cy="32" r="28" stroke="#e5e7eb" strokeWidth="6" fill="none" />
-                <circle
-                  cx="32"
-                  cy="32"
-                  r="28"
-                  stroke={habit.color}
-                  strokeWidth="6"
-                  strokeDasharray={176}
-                  strokeDashoffset={176 - (176 * habit.progress) / 100}
-                  fill="none"
-                  strokeLinecap="round"
-                  className="transition-all duration-500"
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center text-[13px] font-semibold text-gray-700">
-                {habit.progress}%
-              </div>
-            </div>
+          <div className="relative w-20 h-20">
+          <svg className="w-full h-full transform -rotate-90">
+            <circle cx="40" cy="40" r="34" stroke="#e5e7eb" strokeWidth="6" fill="none" />
+            <circle
+              cx="40"
+              cy="40"
+              r="34"
+              stroke={habit.color}
+              strokeWidth="6"
+              strokeDasharray={213.6}
+              strokeDashoffset={213.6 - (213.6 * habit.progress) / 100}
+              fill="none"
+              strokeLinecap="round"
+              className="transition-all duration-500"
+            />
+          </svg>
+          <div className="absolute inset-0 flex items-center justify-center text-[14px] font-semibold text-gray-700">
+            {habit.progress}%
+          </div>
+        </div>
 
             <div className="flex flex-col gap-2">
               <button
