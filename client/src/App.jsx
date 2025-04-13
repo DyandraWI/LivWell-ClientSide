@@ -8,10 +8,12 @@ import RecommendationSection from './components/landing/RecommendationSection';
 import AboutSection from './components/landing/AboutSection';
 import TestimonialsSection from './components/landing/TestimonialsSection';
 import Footer from './components/landing/Footer';
-
 import Login from './pages/login';
 import Register from './pages/register';
-import Dashboard from './pages/dashboard'; 
+import Dashboard from './pages/dashboard';
+
+import ProtectedRoute from './ProtectedRoute';
+import GuestOnlyRoute from './GuestOnlyRoute';
 
 const App = () => {
   return (
@@ -32,12 +34,33 @@ const App = () => {
         }
       />
 
-      {/* Halaman login dan register*/}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      
-      {/* Halaman dashboard */}
-      <Route path="/dashboard" element={<Dashboard />} />
+      {/* Halaman login dan register (hanya bisa diakses jika belum login) */}
+      <Route
+        path="/login"
+        element={
+          <GuestOnlyRoute>
+            <Login />
+          </GuestOnlyRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <GuestOnlyRoute>
+            <Register />
+          </GuestOnlyRoute>
+        }
+      />
+
+      {/* Halaman dashboard (hanya untuk yang sudah login) */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

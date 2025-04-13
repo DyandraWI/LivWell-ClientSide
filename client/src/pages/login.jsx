@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email && !password) {
@@ -35,7 +36,25 @@ const Login = () => {
       return;
     }
 
-    toast.success('Login berhasil!');
+    try {
+      const response = await axios.get('https://apihabittracker.up.railway.app/api/profiles', {
+        params: {
+          email: email,
+          password: password,
+        },
+      });
+
+      if (response.data && response.data.length > 0) {
+        toast.success('Login berhasil!');
+        localStorage.setItem('user_id', response.data[0].id);
+        setTimeout(() => navigate('/dashboard'), 1000);
+      } else {
+        toast.error('Email atau password salah!');
+      }
+    } catch (error) {
+      toast.error('Terjadi kesalahan saat login.');
+      console.error('Error saat login:', error);
+    }
   };
 
   return (
