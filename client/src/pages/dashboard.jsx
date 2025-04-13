@@ -54,7 +54,6 @@
       setShowModal(false);
     };
     
-
     const handleProgressChange = (habitId, change) => {
       setHabits((prevHabits) =>
         prevHabits.map((habit) => {
