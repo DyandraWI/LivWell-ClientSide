@@ -28,12 +28,17 @@ const Dashboard = () => {
 
   const getDefaultColorByCategory = (icon) => {
     switch (icon) {
-      case '💧': return '#3B82F6';
-      case '🌙': return '#8B5CF6';
+      case '💧':
+        return '#3B82F6';
+      case '🌙':
+        return '#8B5CF6';
       case '🏋':
-      case '🏋‍♂': return '#EF4444';
-      case '🧘‍♂': return '#22C55E';
-      default: return '#10B981';
+      case '🏋‍♂':
+        return '#EF4444';
+      case '🧘‍♂':
+        return '#22C55E';
+      default:
+        return '#10B981';
     }
   };
 
@@ -89,7 +94,7 @@ const Dashboard = () => {
 
   const calculateCompletionRate = () => {
     if (habits.length === 0) return 0;
-    const completed = habits.filter(habit => parseFloat(habit.current) >= parseFloat(habit.goal)).length;
+    const completed = habits.filter((habit) => parseFloat(habit.current) >= parseFloat(habit.goal)).length;
     return Math.round((completed / habits.length) * 100);
   };
 
@@ -99,7 +104,7 @@ const Dashboard = () => {
 
   const calculateLongestStreak = () => {
     if (habits.length === 0) return 0;
-    return Math.max(...habits.map(habit => habit.streak));
+    return Math.max(...habits.map((habit) => habit.streak));
   };
 
   const handleLogout = () => {
@@ -115,17 +120,17 @@ const Dashboard = () => {
         setShowUserMenu(false);
       }
     };
-  
+
     if (showUserMenu) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
     }
-  
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showUserMenu]);  
+  }, [showUserMenu]);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 px-6 py-8">
@@ -133,10 +138,7 @@ const Dashboard = () => {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-xl font-semibold text-green-500">Today</h1>
         <div className="flex items-center gap-4 relative">
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 border px-4 py-2 rounded-lg text-sm hover:bg-green-100"
-          >
+          <button onClick={() => setShowModal(true)} className="flex items-center gap-2 border px-4 py-2 rounded-lg text-sm hover:bg-green-100">
             <Plus size={16} /> Add Habit
           </button>
 
@@ -146,26 +148,13 @@ const Dashboard = () => {
 
           {/* User Icon with Hover + Dropdown */}
           <div className="relative" ref={userMenuRef}>
-  <div
-    className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer hover:bg-green-100 transition duration-200"
-    onClick={() => setShowUserMenu(!showUserMenu)}
-    title="User"
-  >
-    <User size={16} className="text-gray-800" />
+            <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer hover:bg-green-100 transition duration-200" onClick={() => setShowUserMenu(!showUserMenu)} title="User">
+              <User size={16} className="text-gray-800" />
             </div>
             {showUserMenu && (
               <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden">
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-red-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
                   </svg>
                   Logout
@@ -199,20 +188,10 @@ const Dashboard = () => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-semibold">Your Habits</h3>
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setShowStats(false)}
-            className={`flex items-center gap-1 px-3 py-1 text-sm rounded-md border ${
-              !showStats ? 'bg-green-100' : 'bg-white'
-            } hover:bg-green-100`}
-          >
+          <button onClick={() => setShowStats(false)} className={`flex items-center gap-1 px-3 py-1 text-sm rounded-md border ${!showStats ? 'bg-green-100' : 'bg-white'} hover:bg-green-100`}>
             <LayoutGrid size={16} /> Grid
           </button>
-          <button
-            onClick={() => setShowStats(true)}
-            className={`flex items-center gap-1 px-3 py-1 text-sm rounded-md border ${
-              showStats ? 'bg-green-100' : 'bg-white'
-            } hover:bg-green-100`}
-          >
+          <button onClick={() => setShowStats(true)} className={`flex items-center gap-1 px-3 py-1 text-sm rounded-md border ${showStats ? 'bg-green-100' : 'bg-white'} hover:bg-green-100`}>
             <BarChart3 size={16} /> Stats
           </button>
         </div>
@@ -225,32 +204,19 @@ const Dashboard = () => {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {habits.map((habit) => (
-              <HabitCard
-                key={habit.id}
-                habit={habit}
-                onIncrease={() => handleProgressChange(habit.id, 1)}
-                onDecrease={() => handleProgressChange(habit.id, -1)}
-                onConfirmDelete={() => handleDeleteHabit(habit.id)}
-              />
+              <HabitCard key={habit.id} habit={habit} onIncrease={() => handleProgressChange(habit.id, 1)} onDecrease={() => handleProgressChange(habit.id, -1)} onConfirmDelete={() => handleDeleteHabit(habit.id)} />
             ))}
           </div>
 
-          <button
-            onClick={() => setShowModal(true)}
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-center"
-          >
+          <button onClick={() => setShowModal(true)} className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg text-center">
             + Add New Habit
           </button>
         </>
       )}
 
-      <AddHabitModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        onSave={handleAddHabit}
-      />
+      <AddHabitModal isOpen={showModal} onClose={() => setShowModal(false)} onSave={handleAddHabit} />
     </div>
   );
 };
 
-export default Dashboard;
+export default Dashboard;

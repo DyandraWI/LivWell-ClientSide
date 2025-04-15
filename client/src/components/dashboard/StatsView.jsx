@@ -1,24 +1,218 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
+const getCategoryGradient = (color) => {
+  const colorMap = {
+    '#3B82F6': 'from-blue-100 to-blue-50', // Water
+    '#8B5CF6': 'from-purple-100 to-purple-50', // Sleep
+    '#EF4444': 'from-red-100 to-red-50', // Exercise
+    '#22C55E': 'from-green-100 to-green-50', // Meditation
+  };
+  return colorMap[color] || 'from-gray-100 to-gray-50';
+};
+
 const StatsView = ({ habits }) => {
+  const generateDailyFeedback = () => {
+    return habits.map((habit) => {
+      const progress = habit.progress;
+      const current = parseFloat(habit.current || 0);
+      const goal = parseFloat(habit.goal || 1);
+      const unit = habit.unit || 'times';
+      const progressWithUnit = `${current}/${goal} ${unit}`;
+      const habitColor = habit.color || '#10B981';
+      const colorClass = getCategoryGradient(habitColor);
+
+      let feedback = '';
+      let emoji = '';
+      let motivation = '';
+
+      switch (habit.name.toLowerCase()) {
+        case 'sleep':
+          if (progress >= 90) {
+            feedback = `Tidur optimal tercapai!`;
+            emoji = '😊';
+            motivation = 'Kualitas tidurmu luar biasa! Tubuhmu pasti sangat berterima kasih!';
+          } else if (progress >= 70) {
+            feedback = `Tidur cukup baik`;
+            emoji = '🛌';
+            motivation = 'Hampir mencapai target ideal! Coba tidur 30 menit lebih awal besok!';
+          } else {
+            feedback = `Perlu lebih banyak tidur`;
+            emoji = '😴';
+            motivation = 'Tidur adalah fondasi kesehatan. Yuk, prioritaskan istirahat malam ini!';
+          }
+          break;
+
+        case 'daily water':
+        case 'drink water':
+          if (progress >= 100) {
+            feedback = `Hidrasi sempurna!`;
+            emoji = '💧✅';
+            motivation = 'Tubuhmu pasti segar dengan hidrasi optimal seperti ini!';
+          } else if (progress >= 75) {
+            feedback = `Hidrasi cukup`;
+            emoji = '😐💦';
+            motivation = 'Tinggal sedikit lagi menuju target harian! Minum segelas lagi yuk!';
+          } else {
+            feedback = `Perbanyak minum`;
+            emoji = '⚠💦';
+            motivation = 'Jangan lupa bawa botol minum kemana pun! Setiap teguk berarti!';
+          }
+          break;
+
+        case 'exercise':
+          if (progress >= 100) {
+            feedback = `Latihan sempurna!`;
+            emoji = '💪🔥';
+            motivation = 'Konsistensimu menginspirasi! Pertahankan energi positif ini!';
+          } else if (progress >= 66) {
+            feedback = `Latihan cukup baik`;
+            emoji = '🏋‍♂⚠';
+            motivation = 'Tingkatkan 10 menit lagi besok untuk hasil lebih maksimal!';
+          } else {
+            feedback = `Ayo lebih aktif!`;
+            emoji = '❌🏋‍♂';
+            motivation = 'Mulai dengan gerakan kecil, yang penting konsisten! Kamu bisa!';
+          }
+          break;
+
+        case 'meditation':
+          if (progress >= 90) {
+            feedback = `Meditasi sempurna!`;
+            emoji = '🧘‍♂️✨';
+            motivation = 'Pikiranmu begitu tenang dan fokus! Pertahankan kedamaian ini!';
+          } else if (progress >= 70) {
+            feedback = `Meditasi cukup baik`;
+            emoji = '🧘‍♂️';
+            motivation = 'Meditasi membawa ketenangan. Tambahkan 5 menit lagi besok!';
+          } else {
+            feedback = `Perlu lebih banyak meditasi`;
+            emoji = '🧘‍♂️⚠️';
+            motivation = 'Ambil napas dalam-dalam. Setiap momen meditasi adalah hadiah untuk dirimu.';
+          }
+          break;
+
+        default:
+          if (progress >= 90) {
+            feedback = `Luar biasa!`;
+            emoji = '🎉';
+            motivation = 'Prestasi hari ini patut dirayakan! Pertahankan semangatnya!';
+          } else if (progress >= 70) {
+            feedback = `Bagus!`;
+            emoji = '👍';
+            motivation = 'Sedikit lagi mencapai kesempurnaan! Kamu hebat!';
+          } else {
+            feedback = `Bisa lebih baik`;
+            emoji = '💪';
+            motivation = 'Setiap kemajuan adalah kemenangan! Besok pasti lebih baik!';
+          }
+      }
+
+      return {
+        habit: habit.name,
+        progress,
+        feedback,
+        emoji,
+        icon: habit.icon,
+        progressWithUnit,
+        colorClass,
+        habitColor,
+        motivation,
+      };
+    });
+  };
+
+  const dailyFeedback = generateDailyFeedback();
+
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md">
-      <h3 className="text-lg font-semibold mb-4">Habit Progress Overview</h3>
-      <div className="w-full h-64">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={habits} margin={{ top: 10, right: 30, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis unit="%" />
-            <Tooltip />
-            <Bar dataKey="progress" radius={[4, 4, 0, 0]}>
-              {habits.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color || '#10B981'} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+    <div className="bg-gray-50 p-6 rounded-2xl">
+      <h3 className="text-2xl font-bold text-gray-800 mb-6">Your Daily Achievement</h3>
+
+      <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-8">
+        <h4 className="text-lg font-semibold text-gray-700 mb-4">Progress Overview</h4>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={habits}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+              <YAxis unit="%" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: '12px',
+                  border: 'none',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                }}
+              />
+              <Bar dataKey="progress" radius={[6, 6, 0, 0]}>
+                {habits.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color || '#10B981'} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div>
+        <h4 className="text-lg font-semibold text-gray-700 mb-4">Personalized Insights</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {dailyFeedback.map((item, index) => (
+            <div key={index} className={`bg-gradient-to-br ${item.colorClass} p-5 rounded-xl shadow-xs transition-all duration-200 hover:shadow-md`}>
+              <div className="flex items-start gap-4">
+                <div
+                  className="flex items-center justify-center w-12 h-12 rounded-full text-2xl shadow-sm"
+                  style={{
+                    backgroundColor: `${item.habitColor}20`,
+                    color: item.habitColor,
+                    border: `2px solid ${item.habitColor}`,
+                  }}
+                >
+                  {item.icon}
+                </div>
+
+                <div className="flex-1">
+                  <div className="flex justify-between items-start mb-1">
+                    <h5 className="font-semibold text-gray-800">{item.habit}</h5>
+                    <div className="flex items-center">
+                      <span
+                        className="text-xs font-bold px-2 py-1 rounded-full mr-2"
+                        style={{
+                          backgroundColor: item.habitColor,
+                          color: 'white',
+                        }}
+                      >
+                        {item.progress}%
+                      </span>
+                      <span className="text-xl">{item.emoji}</span>
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="text-gray-600">{item.feedback}</span>
+                      <span className="font-medium" style={{ color: item.habitColor }}>
+                        {item.progressWithUnit}
+                      </span>
+                    </div>
+                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{
+                          width: `${item.progress}%`,
+                          backgroundColor: item.habitColor,
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white bg-opacity-70 p-3 rounded-lg">
+                    <p className="text-sm text-gray-700 italic">"✨ {item.motivation}"</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
